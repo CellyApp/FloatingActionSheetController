@@ -8,6 +8,10 @@
 
 import UIKit
 
+public protocol FloatingActionSheetControllerDelegate {
+    func floatingActionSheetControllerDismissed(_ controller:FloatingActionSheetController)
+}
+
 open class FloatingActionSheetController: UIViewController {
     
     // MARK: Public
@@ -26,6 +30,7 @@ open class FloatingActionSheetController: UIViewController {
     open var textColor = UIColor.white
     open var dimmingColor = UIColor(white: 0, alpha: 0.7)
     open var pushBackScale: CGFloat = 0.85
+    open var delegate : FloatingActionSheetControllerDelegate?
     
     public convenience init(animationStyle: AnimationStyle) {
         self.init(nibName: nil, bundle: nil)
@@ -330,8 +335,15 @@ open class FloatingActionSheetController: UIViewController {
                         button.layer.transform = transform
                     }) { _ in
                         completion?(button)
+                        if index == buttons.count - 1 {
+                            // on the last button
+                            self.delegate?.floatingActionSheetControllerDismissed(self)
+                        }
+                        
+
                 }
             }
+            
         }
     }
     
